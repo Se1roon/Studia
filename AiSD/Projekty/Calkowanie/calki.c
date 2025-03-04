@@ -12,7 +12,8 @@ double f3(double x) {
 }
 
 double f4(double x) {
-	return x*x + 2*x;
+//	return x*x + 2*x;
+	return 0;
 }
 
 double prostokaty(double (*f)(double)) {
@@ -34,26 +35,12 @@ double trapezy(double (*f)(double)) {
 }
      
 double mc(double (*f)(double)) {
-	// Znalezc fmin i fmax (przeleciec caly przedzial)
-	// jezeli oba sa > 0 to mniejszy do 0
-	// N razy generujemy x <c_od; c_do> i y <Min; Max>
-	// jezeli y > 0 to +1
-	// jezeli y < 0 to -1
-	// N+/N- = P[]/całka
-
-	double sum = 0;
-	double distance = c_do - c_od;
-
 	srand(time(NULL));
 
-	int i = 1;
-	for (; i <= lp; i++) {
-		double x = f(c_od + ((double)rand() / ((double)RAND_MAX + 1) * distance));
-		sum += x;	
-	}
+	double sum = 0;
+	for (int c = 0; c < lp; c++)
+		sum += f(c_od + (((double)rand()/RAND_MAX) * (c_do - c_od)));
 
-	sum = distance * sum / lp;
-
-	return sum;
+	return (c_do - c_od) * sum / lp;
 }
 
