@@ -3,7 +3,7 @@
 #include <math.h>
 #include <time.h>
 
-#define lp 2000
+#define lp 20000
 
 double c_od, c_do;
 
@@ -12,8 +12,7 @@ double f3(double x) {
 }
 
 double f4(double x) {
-//	return x*x + 2*x;
-	return 0;
+	return x*x + 2*x;
 }
 
 double prostokaty(double (*f)(double)) {
@@ -37,10 +36,25 @@ double trapezy(double (*f)(double)) {
 double mc(double (*f)(double)) {
 	srand(time(NULL));
 
-	double sum = 0;
-	for (int c = 0; c < lp; c++)
-		sum += f(c_od + (((double)rand()/RAND_MAX) * (c_do - c_od)));
+	double x_dif = c_do - c_od;
 
-	return (c_do - c_od) * sum / lp;
+	double min = 0;
+	double max = 0;
+	for (double x = c_od; x <= c_do; x += x_dif/lp) {
+		if (f(x) > max) max = f(x);
+		else if (f(x) < min) min = f(x);
+	}
+
+	int u = 0;
+	for (int i = 0; i < lp; i++) {
+		double r_x = c_od + (double)rand()/RAND_MAX * x_dif;
+		double r_y = min + (double)rand()/RAND_MAX * (max - min);
+
+		if (f(r_x) >= r_y) u++;
+	}
+
+	double integral = (double)u / lp * (x_dif * (max - min));
+
+	return integral - fabs(min) * (c_do - c_od);
 }
 
