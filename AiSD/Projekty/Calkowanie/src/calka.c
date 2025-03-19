@@ -14,7 +14,7 @@ double f2(double x) {
 }
 
 
-int main(int argc, char *argv[]) {  
+int main() {  
     printf("od=");
     scanf("%lf",&c_od);
     printf("do=");
