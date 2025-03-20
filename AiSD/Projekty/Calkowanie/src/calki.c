@@ -8,11 +8,11 @@
 double c_od, c_do;
 
 double f3(double x) {
-	return cos(3*x*x);      
+	return cos(3*x) + sin(x);
 }
 
 double f4(double x) {
-	return 2.13*pow(x - 1, 4) * 3.1 * x*x + pow(x - 2, 2) - 8;
+	return 4*x*x*x + 1.5*x*x + 3*x + 4;
 }
 
 double prostokaty(double (*f)(double)) {
