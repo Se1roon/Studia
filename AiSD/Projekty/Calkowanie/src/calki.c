@@ -41,7 +41,7 @@ double mc(double (*f)(double)) {
 	double krok = (c_do - c_od) / lp;
 
 	double f_min = f(c_od);
-	double f_max = f(c_do);
+	double f_max = f(c_od);
 
 	for (double i = c_od; i <= c_do; i += krok) {
 		x = f(i);
