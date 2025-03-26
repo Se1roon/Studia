@@ -6,23 +6,24 @@
 
 
 int main(int argc, char *argv[]) {
-	if (argc != 2) {
-		fprintf(stderr, "Usage: %s <n>\n", argv[0]);
-		return 0;
-	}
+	OPTIONS *options = get_options(argc, argv);
+	if (!options) return 0;
 
-	int n = atoi(argv[1]);
+	// Maybe implement some kind of summary of the options used
 
-	int *arr = generate_data(n, RANDOM);
-	
-	insertion_sort_asc(arr, n);
+	int n = options->n;
+
+	int *arr = generate_data(n, options->v);
+
+	if (options->i || options->a)
+		insertion_sort_asc(arr, n);
 
 	for (int i = 0; i < n; i++)
 		printf("a[%d] = %d\n", i, arr[i]);
 
 	output_data(arr, n);
-
 	free(arr);
+	free(options);
 	return 0;
 }
 
