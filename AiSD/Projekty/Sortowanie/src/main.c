@@ -15,11 +15,10 @@ int main(int argc, char *argv[]) {
 
 	int *arr = generate_data(n, options->v);
 
-	if (options->i || options->a)
-		insertion_sort_asc(arr, n);
-
-	for (int i = 0; i < n; i++)
-		printf("a[%d] = %d\n", i, arr[i]);
+	if (options->i || options->a) {
+		double execution_time = get_algo_time(&insertion_sort_asc, arr, n) / 1000.0;
+		printf("[Insertion Sort] took %.2lf second(s) to execute.\n\n", execution_time);
+	}
 
 	output_data(arr, n);
 	free(arr);

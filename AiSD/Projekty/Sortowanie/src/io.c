@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <unistd.h>
+#include <math.h>
 
 #include "io.h"
 
@@ -66,19 +67,30 @@ OPTIONS *get_options(int argc, char *argv[]) {
 
 int *generate_data(int size, VARIANT v) {
 	int *array = (int *)calloc(size, sizeof(int));
+
 	if (v == RANDOM) {
 		srand(time(NULL));
 
 		for (int i = 0; i < size; i++)
 			array[i] = (double)rand()/RAND_MAX * 200 - 100;
 	}
-	else if (v == REVERSE) { // Przy wiekszych size liczby wychodzą poza zakres (-100, 100)
-		for (int i = 0; i < size; i++)
-			array[i] = size - i;
+	else if (v == REVERSE) {
+		int repeat_num = (int)ceil(size / 200.0);
+		int current_num = 100;
+
+		for (int i = 0; i < size; i++) {
+			if (i % repeat_num == 0) current_num--;
+			array[i] = current_num;
+		}
 	}
-	else if (v == SORTED) { // tak samo jak u góry
-		for (int i = 0; i < size; i++)
-			array[i] = i;
+	else if (v == SORTED) {
+		int repeat_num = (int)ceil(size / 200.0);
+		int current_num = -100;
+
+		for (int i = 0; i < size; i++) {
+			if (i % repeat_num == 0) current_num++;
+			array[i] = current_num;
+		}
 	}
 
 	return array;

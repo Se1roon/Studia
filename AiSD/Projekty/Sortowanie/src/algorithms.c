@@ -1,3 +1,6 @@
+#include <sys/time.h>
+#include <stddef.h>
+
 #include "algorithms.h"
 
 
@@ -14,5 +17,15 @@ void insertion_sort_asc(int *array, int size) {
 	}
 
 	return;
+}
+
+int get_algo_time(void (*algorithm)(int *, int), int *data, int data_size) {
+	struct timeval start, stop;
+
+	gettimeofday(&start, NULL);
+	algorithm(data, data_size);
+	gettimeofday(&stop, NULL);
+
+	return stop.tv_usec - start.tv_usec;
 }
 
