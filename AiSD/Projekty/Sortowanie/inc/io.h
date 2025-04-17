@@ -8,10 +8,16 @@ typedef enum data_generation_variant {
 	RANDOM, REVERSE, SORTED
 } VARIANT;
 
+typedef enum insertion_sort_type {
+	INS1, INS2, INS3, INS4, // INS4 = ALL insertion_sorts
+} INSERTION_T;
+
 typedef struct options_t {
 	int n;
-	bool a; // All
-	bool i; // Insertion
+	bool a;         // All
+	INSERTION_T is; // Insertion sort
+	bool bs;        // Bubble sort
+	bool ss;	    // Selection Sort
 	VARIANT v;  // Dataset
 } OPTIONS;
 
