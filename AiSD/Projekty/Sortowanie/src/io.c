@@ -20,6 +20,10 @@ void print_help(char *argv[]) {
 	printf("\t\t\t-i 4 -- wszystkie warianty insertion_sorta\n\n");
 	printf("\t\t-b  -- Bubble sort\n");
 	printf("\t\t-e  -- Selection sort\n\n");
+	printf("\t\t-q  -- Quicksort\n");
+	printf("\t\t\t-q 1 -- quicksort2 strona 22 wyklad Sortowanie 2\n");
+	printf("\t\t\t-q 2 -- quicksort3 strona 23 wyklad Sortowanie 2\n");
+	printf("\t\t\t-q 3 -- wszystkie quicksorty\n\n");
 	printf("\tDANE (jedna opcja, domyslnie -r)\n");
 	printf("\t\t-r  -- Losowe liczby calkowite\n");
 	printf("\t\t-d  -- Liczby w kolejnosc malejacej\n");
@@ -37,8 +41,9 @@ OPTIONS *get_options(int argc, char *argv[]) {
 
 	OPTIONS *opts = (OPTIONS *)calloc(1, sizeof(OPTIONS)); // Using calloc so that bools are init to false
 
+	int v = -1;
 	int c;
-	while ((c = getopt(argc, argv, "n:ai:berds")) > 0) {
+	while ((c = getopt(argc, argv, "n:ai:beq:rds")) > 0) {
 		switch (c) {
 			case 'n':
 				opts->n = atoi(optarg);
@@ -47,7 +52,7 @@ OPTIONS *get_options(int argc, char *argv[]) {
 				opts->a = true;
 				break;
 			case 'i':
-				int v = atoi(optarg);
+				v = atoi(optarg);
 				if (v == 1) opts->is = INS1;
 				else if (v == 2) opts->is = INS2;
 				else if (v == 3) opts->is = INS3;
@@ -64,6 +69,18 @@ OPTIONS *get_options(int argc, char *argv[]) {
 				break;
 			case 'e':
 				opts->ss = true;
+				break;
+			case 'q':
+				v = atoi(optarg);
+				if (v == 1) opts->qs = QS1;
+				else if (v == 2) opts->qs = QS2;
+				else if (v == 3) opts->qs = QS3;
+				else {
+					fprintf(stderr, "Invalid quicksort variant!\n");
+					print_help(argv);
+					free(opts);
+					exit(0);
+				}
 				break;
 			case 'r':
 				opts->v = RANDOM;

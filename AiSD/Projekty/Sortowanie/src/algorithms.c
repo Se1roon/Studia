@@ -5,6 +5,9 @@
 
 
 void min_wekt(int *tab, int n, int N, int *i_min, int *min);
+void swap(int *a, int *b);
+int partition_1(int *array, int l, int r);
+int partition_2(int *array, int l, int r);
 
 
 // Z jednoczesnym przepychaniem (Sortowanie 1 - strona 4)
@@ -102,6 +105,35 @@ void selection_sort(int *array, int size) {
 	return;
 }
 
+void quicksort_wrapper_1(int *array, int size) {
+	quicksort_1(array, 0, size - 1);
+	return;
+}
+
+// Sortowanie 2 - Strona 18
+void quicksort_1(int *array, int l, int r) {
+	if (r <= l)	return;
+	int i = partition_1(array, l, r);
+	quicksort_1(array, l, i - 1);
+	quicksort_1(array, i + 1, r);
+
+	return;
+}
+
+void quicksort_wrapper_2(int *array, int size) {
+	quicksort_2(array, 0, size - 1);
+	return;
+}
+
+void quicksort_2(int *array, int l, int r) {
+	if (r <= l) return;
+	int i = partition_2(array, l, r);
+	quicksort_2(array, l, i - 1);
+	quicksort_2(array, i + 1, r);
+
+	return;
+}
+
 double get_algo_time(void (*algorithm)(int *, int), int *data, int data_size) {
 	clock_t before = clock();
 	algorithm(data, data_size);
@@ -125,3 +157,44 @@ void min_wekt(int *tab, int n, int N, int *i_min, int *min) {
 	return;
 }
 
+int partition_1(int *array, int l, int r) {
+	int i = l - 1;
+	int j;
+	int v = array[r];
+
+	for (j = l; j < r; j++) {
+		if (array[j] <= v) {
+			i++;
+			swap(&array[i], &array[j]);
+		}
+	}
+	swap(&array[i + 1], &array[r]);
+
+	return i + 1;
+}
+
+int partition_2(int *array, int l, int r) {
+	int i = l - 1;
+	int j = r;
+	int v = array[r];
+
+	for (;;) {
+		while (array[++i] < v);
+		while (v < array[--j]) 
+			if (j == l) break;
+		
+		if (i >= j) break;
+		swap(&array[i], &array[j]);
+	}
+
+	swap(&array[i], &array[r]);
+	return i;
+}
+
+void swap(int *a, int *b) {
+	int z = *a;
+	*a = *b;
+	*b = z;
+
+	return;
+}

@@ -9,8 +9,12 @@ typedef enum data_generation_variant {
 } VARIANT;
 
 typedef enum insertion_sort_type {
-	INS1, INS2, INS3, INS4, // INS4 = ALL insertion_sorts
+	INS1=1, INS2, INS3, INS4, // INS4 = ALL insertion_sorts
 } INSERTION_T;
+
+typedef enum quicksort_type {
+	QS1=1, QS2, QS3 // QS3 = All quicksorts
+} QUICKSORT_T;
 
 typedef struct options_t {
 	int n;
@@ -18,6 +22,7 @@ typedef struct options_t {
 	INSERTION_T is; // Insertion sort
 	bool bs;        // Bubble sort
 	bool ss;	    // Selection Sort
+	QUICKSORT_T qs; // Quicksort
 	VARIANT v;  // Dataset
 } OPTIONS;
 
