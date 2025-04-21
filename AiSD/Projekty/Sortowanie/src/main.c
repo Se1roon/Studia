@@ -5,7 +5,6 @@
 #include "algorithms.h"
 #include "io.h"
 
-//TODO: Heapsort doesn't sort the first item.
 
 void print_array(int *array, int array_len);
 

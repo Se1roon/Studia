@@ -9,8 +9,7 @@ void min_wekt(int *tab, int n, int N, int *i_min, int *min);
 void swap(int *a, int *b);
 int partition_1(int *array, int l, int r);
 int partition_2(int *array, int l, int r);
-void build_max_heap(int *array, int size);
-void max_heapify(int *array, int i, int n);
+void heapify(int *array, int i, int n);
 void shell_sort_insert(int *array, int i_max, int h);
 
 
@@ -140,11 +139,12 @@ void quicksort_2(int *array, int l, int r) {
 
 // Sortowanie 2 - Strona 39
 void heapsort(int *array, int size) {
-	build_max_heap(array, size);
-	for (int i = size; i >= 2; i--) {
-		swap(&array[1], &array[i]);
-		size--;
-		max_heapify(array, 1, size);
+	for (int i = size / 2 - 1; i >= 0; i--)
+		heapify(array, i, size);
+
+	for (int i = size - 1; i > 0; i--) {
+		swap(&array[0], &array[i]);
+		heapify(array, 0, i);
 	}
 	
 	return;
@@ -226,26 +226,16 @@ int partition_2(int *array, int l, int r) {
 	return i;
 }
 
-void build_max_heap(int *array, int size) {
-	int i;
-	for (i = size / 2; i > 0; i--)
-		max_heapify(array, i, size);
-
-	return;
-}
-
-void max_heapify(int *array, int i, int n) {
-	int largest;
-	int l = 2 * i;
+void heapify(int *array, int i, int n) {
+	int largest = i;
+	int l = 2 * i + 1;
 	int r = l + 1;
 
-	if (l <= n && array[l] > array[i]) largest = l;
-	else largest = i;
-
-	if (r <= n && array[r] > array[largest]) largest = r;
+	if (l < n && array[l] > array[largest]) largest = l;
+	if (r < n && array[r] > array[largest]) largest = r;
 	if (largest != i) {
 		swap(&array[i], &array[largest]);
-		max_heapify(array, largest, n);
+		heapify(array, largest, n);
 	}
 
 	return;
