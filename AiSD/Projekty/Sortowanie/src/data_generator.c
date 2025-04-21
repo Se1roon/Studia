@@ -38,17 +38,18 @@ int main(int argc, char *argv[]) {
 void generate_random_data(int n, FILE *file) {
 	srand(time(NULL));
 
-	int arr[n];
+	int *arr = (int *)calloc(n, sizeof(int));
 	for (int i = 0; i < n; i++)
 		arr[i] = (double)rand()/RAND_MAX * 200 - 100;
 
 	fwrite(arr, sizeof(int), n, file);
 
+	free(arr);
 	return;
 }
 
 void generate_asc_data(int n, FILE *file) {
-	int arr[n];
+	int *arr = (int *)calloc(n, sizeof(int));
 
 	int repeat_num = (int)ceil(n / 200.0);
 	int current_num = -100;
@@ -60,11 +61,12 @@ void generate_asc_data(int n, FILE *file) {
 
 	fwrite(arr, sizeof(int), n, file);
 
+	free(arr);
 	return;
 }
 
 void generate_dsc_data(int n, FILE *file) {
-	int arr[n];
+	int *arr = (int *)calloc(n, sizeof(int));
 
 	int repeat_num = (int)ceil(n / 200.0);
 	int current_num = 100;
@@ -76,6 +78,7 @@ void generate_dsc_data(int n, FILE *file) {
 
 	fwrite(arr, sizeof(int), n, file);
 	
+	free(arr);
 	return;
 }
 
