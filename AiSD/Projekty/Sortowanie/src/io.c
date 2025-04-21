@@ -9,8 +9,9 @@
 
 
 void print_help(char *argv[]) {
-	printf("Usage: %s -n <> [-a|-i <1,2,3,4>|-b|-e|-q <1,2,3>|-h|-S] [-r|-d|-s]\n\n", argv[0]);
-	printf("\t\t-n  -- Ilosc elementow\n\n");
+	printf("Usage: %s -f <path> -p [-a|-i <1,2,3,4>|-b|-e|-q <1,2,3>|-h|-S]\n\n", argv[0]);
+	printf("\t\t-f  -- Sciezka do pliku z danymi\n");
+	printf("\t\t-p  -- Wypisuje posortowana tablice\n\n");
 	printf("\tALGORYTMY\n");
 	printf("\t\t-a  -- Wszystkie algorytmy na raz\n\n");
 	printf("\t\t-i  -- Sortowanie przez wybieranie\n");
@@ -26,10 +27,6 @@ void print_help(char *argv[]) {
 	printf("\t\t\t-q 3 -- wszystkie quicksorty\n");
 	printf("\t\t-h  -- Heapsort\n");
 	printf("\t\t-S  -- Shell Sort\n\n");
-	printf("\tDANE (jedna opcja, domyslnie -r)\n");
-	printf("\t\t-r  -- Losowe liczby calkowite\n");
-	printf("\t\t-d  -- Liczby w kolejnosc malejacej\n");
-	printf("\t\t-s  -- Posortowane liczby\n\n");
 	
 	return;
 }
@@ -41,14 +38,18 @@ OPTIONS *get_options(int argc, char *argv[]) {
 		return NULL;
 	}
 
-	OPTIONS *opts = (OPTIONS *)calloc(1, sizeof(OPTIONS)); // Using calloc so that bools are init to false
+	OPTIONS *opts = (OPTIONS *)calloc(1, sizeof(OPTIONS)); 
+	opts->f_path = NULL;
 
 	int v = -1;
 	int c;
-	while ((c = getopt(argc, argv, "n:ai:beq:hSrds")) > 0) {
+	while ((c = getopt(argc, argv, "f:pai:beq:hS")) > 0) {
 		switch (c) {
-			case 'n':
-				opts->n = atoi(optarg);
+			case 'f':
+				opts->f_path = optarg;
+				break;
+			case 'p':
+				opts->print = true;
 				break;
 			case 'a':
 				opts->a = true;
@@ -90,15 +91,6 @@ OPTIONS *get_options(int argc, char *argv[]) {
 			case 'S':
 				opts->shell = true;
 				break;
-			case 'r':
-				opts->v = RANDOM;
-				break;
-			case 'd':
-				opts->v = REVERSE;
-				break;
-			case 's':
-				opts->v = SORTED;
-				break;
 			case '?':
 				print_help(argv);
 				free(opts);
@@ -109,34 +101,21 @@ OPTIONS *get_options(int argc, char *argv[]) {
 	return opts;
 }
 
-int *generate_data(int size, VARIANT v) {
-	int *array = (int *)calloc(size, sizeof(int));
-
-	if (v == RANDOM) {
-		srand(time(NULL));
-
-		for (int i = 0; i < size; i++)
-			array[i] = (double)rand()/RAND_MAX * 200 - 100;
-	}
-	else if (v == REVERSE) {
-		int repeat_num = (int)ceil(size / 200.0);
-		int current_num = 100;
-
-		for (int i = 0; i < size; i++) {
-			if (i % repeat_num == 0) current_num--;
-			array[i] = current_num;
-		}
-	}
-	else if (v == SORTED) {
-		int repeat_num = (int)ceil(size / 200.0);
-		int current_num = -100;
-
-		for (int i = 0; i < size; i++) {
-			if (i % repeat_num == 0) current_num++;
-			array[i] = current_num;
-		}
+int *load_data_file(char *path, int *size_out) {
+	FILE *in_f = fopen(path, "r+");
+	if (!in_f) {
+		fprintf(stderr, "\"%s\" doesn't exist!\n", path);
+		exit(-1);
 	}
 
-	return array;
+	int arr_len = 1;
+	int *arr = (int *)calloc(arr_len, sizeof(int));
+
+	while (fread(&arr[arr_len - 1], sizeof(int), 1, in_f) > 0)
+		arr = (int *)realloc(arr, sizeof(int) * (++arr_len));
+	arr = (int *)realloc(arr, sizeof(int) * (--arr_len));
+
+	*size_out = arr_len;
+	return arr;
 }
 

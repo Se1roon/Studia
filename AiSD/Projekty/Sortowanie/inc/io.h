@@ -4,10 +4,6 @@
 #include <stdbool.h>
 
 
-typedef enum data_generation_variant {
-	RANDOM, REVERSE, SORTED
-} VARIANT;
-
 typedef enum insertion_sort_type {
 	INS1=1, INS2, INS3, INS4, // INS4 = ALL insertion_sorts
 } INSERTION_T;
@@ -17,7 +13,8 @@ typedef enum quicksort_type {
 } QUICKSORT_T;
 
 typedef struct options_t {
-	int n;
+	char *f_path;   // Path to file containing data
+	bool print;		// Print sorted array 
 	bool a;         // All
 	INSERTION_T is; // Insertion sort
 	bool bs;        // Bubble sort
@@ -25,14 +22,13 @@ typedef struct options_t {
 	QUICKSORT_T qs; // Quicksort
 	bool hs;		// Heapsort
 	bool shell;     // Shell Sort
-	VARIANT v;  // Dataset
 } OPTIONS;
 
 
 void print_help(char *argv[]);
 OPTIONS *get_options(int argc, char *argv[]);
 
-int *generate_data(int size, VARIANT v);
+int *load_data_file(char *path, int *size_out);
 
 
 #endif
