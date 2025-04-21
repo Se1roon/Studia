@@ -5,6 +5,7 @@
 #include "io.h"
 
 //TODO: Inspect -d and -s data generation.
+//TODO: Heapsort doesn't sort the first item.
 
 
 int main(int argc, char *argv[]) {
@@ -64,7 +65,20 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	//output_data(arr, n);
+	if (options->hs || options->a) {
+		arr = generate_data(n, options->v);
+		double exec_time = get_algo_time(&heapsort, arr, n);
+		printf("[Heapsort] took %.3lf second(s) to execute.\n\n", exec_time);
+		free(arr);	
+	}
+
+	if (options->shell || options->a) {
+		arr = generate_data(n, options->v);
+		double exec_time = get_algo_time(&shell_sort, arr, n);
+		printf("[Shell Sort] took %.3lf second(s) to execute.\n\n", exec_time);
+		free(arr);
+	}
+
 	free(options);
 	return 0;
 }

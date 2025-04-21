@@ -1,5 +1,6 @@
 #include <time.h>
 #include <stddef.h>
+#include <stdio.h>
 
 #include "algorithms.h"
 
@@ -8,9 +9,12 @@ void min_wekt(int *tab, int n, int N, int *i_min, int *min);
 void swap(int *a, int *b);
 int partition_1(int *array, int l, int r);
 int partition_2(int *array, int l, int r);
+void build_max_heap(int *array, int size);
+void max_heapify(int *array, int i, int n);
+void shell_sort_insert(int *array, int i_max, int h);
 
 
-// Z jednoczesnym przepychaniem (Sortowanie 1 - strona 4)
+// Sortowanie 1 - strona 4
 void insertion_sort_1(int *array, int size) {
 	int i, x, j;
 
@@ -29,7 +33,7 @@ void insertion_sort_1(int *array, int size) {
 	return;
 }
 
-// Z jednoczesnym przepychaniem i wartownikiem (Sortowanie 1 - strona 5)
+// Sortowanie 1 - strona 5
 void insertion_sort_2(int *array, int size) {
 	int i, x, j;
 
@@ -50,7 +54,7 @@ void insertion_sort_2(int *array, int size) {
 	return;
 }
 
-// Wstawianie połówkowe (Sortowanie 1 - Strona 14)
+// Sortowanie 1 - Strona 14
 void insertion_sort_3(int *array, int size) {
 	int i, x, j, l, p, sr;
 
@@ -134,6 +138,37 @@ void quicksort_2(int *array, int l, int r) {
 	return;
 }
 
+// Sortowanie 2 - Strona 39
+void heapsort(int *array, int size) {
+	build_max_heap(array, size);
+	for (int i = size; i >= 2; i--) {
+		swap(&array[1], &array[i]);
+		size--;
+		max_heapify(array, 1, size);
+	}
+	
+	return;
+}
+
+// Sortowanie 2 - Strona 46
+void shell_sort(int *array, int size) {
+	int hn = 1;
+	int h = 1;
+
+	do {
+		h = hn;
+		hn = h * 3 + 1;
+	} while (hn <= size);
+
+	while (h > 0) {
+		shell_sort_insert(array, size, h);
+		h /= 3;
+	}
+
+	return;
+}
+
+
 double get_algo_time(void (*algorithm)(int *, int), int *data, int data_size) {
 	clock_t before = clock();
 	algorithm(data, data_size);
@@ -191,6 +226,42 @@ int partition_2(int *array, int l, int r) {
 	return i;
 }
 
+void build_max_heap(int *array, int size) {
+	int i;
+	for (i = size / 2; i > 0; i--)
+		max_heapify(array, i, size);
+
+	return;
+}
+
+void max_heapify(int *array, int i, int n) {
+	int largest;
+	int l = 2 * i;
+	int r = l + 1;
+
+	if (l <= n && array[l] > array[i]) largest = l;
+	else largest = i;
+
+	if (r <= n && array[r] > array[largest]) largest = r;
+	if (largest != i) {
+		swap(&array[i], &array[largest]);
+		max_heapify(array, largest, n);
+	}
+
+	return;
+}
+
+void shell_sort_insert(int *array, int i_max, int h) {
+	int n, i, j;
+
+	for (n = 0; n < h; n++)
+		for (i = n + h; i < i_max; i += h)
+			for (j = i - h; j >= 0 && array[j] > array[j + h]; j -= h)
+				swap(&array[j + h], &array[j]);
+
+	return;
+}
+
 void swap(int *a, int *b) {
 	int z = *a;
 	*a = *b;
@@ -198,3 +269,4 @@ void swap(int *a, int *b) {
 
 	return;
 }
+

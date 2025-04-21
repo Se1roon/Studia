@@ -9,7 +9,7 @@
 
 
 void print_help(char *argv[]) {
-	printf("Usage: %s -n [-a|-i1|-i2|-i3|-i4|-b|-e] [-r|-d|-s]\n\n", argv[0]);
+	printf("Usage: %s -n <> [-a|-i <1,2,3,4>|-b|-e|-q <1,2,3>|-h|-S] [-r|-d|-s]\n\n", argv[0]);
 	printf("\t\t-n  -- Ilosc elementow\n\n");
 	printf("\tALGORYTMY\n");
 	printf("\t\t-a  -- Wszystkie algorytmy na raz\n\n");
@@ -17,13 +17,15 @@ void print_help(char *argv[]) {
 	printf("\t\t\t-i 1 -- z jednoczesnym przepychaniem\n");
 	printf("\t\t\t-i 2 -- z jednoczesnym przepychaniem i wartownikiem\n");
 	printf("\t\t\t-i 3 -- wstawianie połówkowe\n");
-	printf("\t\t\t-i 4 -- wszystkie warianty insertion_sorta\n\n");
+	printf("\t\t\t-i 4 -- wszystkie warianty insertion_sorta\n");
 	printf("\t\t-b  -- Bubble sort\n");
-	printf("\t\t-e  -- Selection sort\n\n");
+	printf("\t\t-e  -- Selection sort\n");
 	printf("\t\t-q  -- Quicksort\n");
 	printf("\t\t\t-q 1 -- quicksort2 strona 22 wyklad Sortowanie 2\n");
 	printf("\t\t\t-q 2 -- quicksort3 strona 23 wyklad Sortowanie 2\n");
-	printf("\t\t\t-q 3 -- wszystkie quicksorty\n\n");
+	printf("\t\t\t-q 3 -- wszystkie quicksorty\n");
+	printf("\t\t-h  -- Heapsort\n");
+	printf("\t\t-S  -- Shell Sort\n\n");
 	printf("\tDANE (jedna opcja, domyslnie -r)\n");
 	printf("\t\t-r  -- Losowe liczby calkowite\n");
 	printf("\t\t-d  -- Liczby w kolejnosc malejacej\n");
@@ -43,7 +45,7 @@ OPTIONS *get_options(int argc, char *argv[]) {
 
 	int v = -1;
 	int c;
-	while ((c = getopt(argc, argv, "n:ai:beq:rds")) > 0) {
+	while ((c = getopt(argc, argv, "n:ai:beq:hSrds")) > 0) {
 		switch (c) {
 			case 'n':
 				opts->n = atoi(optarg);
@@ -81,6 +83,12 @@ OPTIONS *get_options(int argc, char *argv[]) {
 					free(opts);
 					exit(0);
 				}
+				break;
+			case 'h':
+				opts->hs = true;
+				break;
+			case 'S':
+				opts->shell = true;
 				break;
 			case 'r':
 				opts->v = RANDOM;
@@ -130,29 +138,5 @@ int *generate_data(int size, VARIANT v) {
 	}
 
 	return array;
-}
-
-int *read_data(int size) {
-	// ??? Nie wiem czy to w ogole potrzebne przeczytac jeszcze raz pdfa
-	FILE *file = fopen("./dane", "r+");
-	if (!file) {
-		fprintf(stderr, "Plik 'dane' nie istnieje!\n");
-		return NULL;
-	}
-
-	int *array = (int *)calloc(size, sizeof(int));
-	fread(array, sizeof(int), size, file);
-
-	return array;
-}
-
-void output_data(int *array, int size) {
-	// Maybe delete size parameter and somehow deduce array size
-	FILE *file = fopen("./dane", "w+");
-	fwrite(array, sizeof(int), size, file);
-
-	fclose(file);
-
-	return;
 }
 

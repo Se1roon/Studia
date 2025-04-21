@@ -23,6 +23,8 @@ typedef struct options_t {
 	bool bs;        // Bubble sort
 	bool ss;	    // Selection Sort
 	QUICKSORT_T qs; // Quicksort
+	bool hs;		// Heapsort
+	bool shell;     // Shell Sort
 	VARIANT v;  // Dataset
 } OPTIONS;
 
@@ -31,9 +33,6 @@ void print_help(char *argv[]);
 OPTIONS *get_options(int argc, char *argv[]);
 
 int *generate_data(int size, VARIANT v);
-int *read_data(int size); // This can be used to read part of an input from file
-void output_data(int *array, int size);
 
 
 #endif
-
