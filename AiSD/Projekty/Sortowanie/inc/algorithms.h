@@ -2,21 +2,12 @@
 #define ALGORITHMS_H
 
 
-void insertion_sort_1(int *array, int size);
-void insertion_sort_2(int *array, int size);
-void insertion_sort_3(int *array, int size);
-
+void insertion_sort(int *array, int size);
 void bubble_sort(int *array, int size);
-
 void selection_sort(int *array, int size);
-
-void quicksort_wrapper_1(int *array, int size);
-void quicksort_1(int *array, int l, int r);
-void quicksort_wrapper_2(int *array, int size);
-void quicksort_2(int *array, int l, int r);
-
+void quicksort_wrapper(int *array, int size);
+void quicksort(int *array, int l, int r);
 void heapsort(int *array, int size);
-
 void shell_sort(int *array, int size);
 
 double get_algo_time(void (*algorithm)(int *, int), int *data, int data_size);

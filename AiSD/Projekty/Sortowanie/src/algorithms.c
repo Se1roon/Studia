@@ -7,33 +7,12 @@
 
 void min_wekt(int *tab, int n, int N, int *i_min, int *min);
 void swap(int *a, int *b);
-int partition_1(int *array, int l, int r);
-int partition_2(int *array, int l, int r);
+int partition(int *array, int l, int r);
 void heapify(int *array, int i, int n);
 void shell_sort_insert(int *array, int i_max, int h);
 
 
-// Sortowanie 1 - strona 4
-void insertion_sort_1(int *array, int size) {
-	int i, x, j;
-
-	for (i = 1; i < size; i++) {
-		x = array[i];
-		j = i - 1;
-
-		while (j >= 0 && array[j] > x) {
-			array[j + 1] = array[j];
-			j--;
-		} 
-
-		array[j + 1] = x;
-	}
-
-	return;
-}
-
-// Sortowanie 1 - strona 5
-void insertion_sort_2(int *array, int size) {
+void insertion_sort(int *array, int size) {
 	int i, x, j;
 
 	for (i = 2; i <= size; i++) {
@@ -53,32 +32,6 @@ void insertion_sort_2(int *array, int size) {
 	return;
 }
 
-// Sortowanie 1 - Strona 14
-void insertion_sort_3(int *array, int size) {
-	int i, x, j, l, p, sr;
-
-	for (i = 1; i < size; i++) {
-		x = array[i];
-		l = 0;
-		p = i - 1;
-
-		while (l <= p) {
-			sr = (l + p) / 2;
-			if (x < array[sr]) p = sr - 1;
-			else l = sr + 1;
-		}
-
-		for (j = i - 1; j >= l; j--) {
-			array[j + 1] = array[j];
-			array[l] = x;
-		}
-		
-	}
-
-	return;
-}
-
-// Sortowanie 1 - Strona 15
 void bubble_sort(int *array, int size) {
 	int i, j, pom;
 	
@@ -95,7 +48,6 @@ void bubble_sort(int *array, int size) {
 	return;
 }
 
-// Sortowanie 1 - Strona 23
 void selection_sort(int *array, int size) {
 	int i, pom, j, min;
 	for (i = 0; i < size; i++) {
@@ -108,36 +60,20 @@ void selection_sort(int *array, int size) {
 	return;
 }
 
-void quicksort_wrapper_1(int *array, int size) {
-	quicksort_1(array, 0, size - 1);
+void quicksort_wrapper(int *array, int size) {
+	quicksort(array, 0, size - 1);
 	return;
 }
 
-// Sortowanie 2 - Strona 18
-void quicksort_1(int *array, int l, int r) {
-	if (r <= l)	return;
-	int i = partition_1(array, l, r);
-	quicksort_1(array, l, i - 1);
-	quicksort_1(array, i + 1, r);
-
-	return;
-}
-
-void quicksort_wrapper_2(int *array, int size) {
-	quicksort_2(array, 0, size - 1);
-	return;
-}
-
-void quicksort_2(int *array, int l, int r) {
+void quicksort(int *array, int l, int r) {
 	if (r <= l) return;
-	int i = partition_2(array, l, r);
-	quicksort_2(array, l, i - 1);
-	quicksort_2(array, i + 1, r);
+	int i = partition(array, l, r);
+	quicksort(array, l, i - 1);
+	quicksort(array, i + 1, r);
 
 	return;
 }
 
-// Sortowanie 2 - Strona 39
 void heapsort(int *array, int size) {
 	for (int i = size / 2 - 1; i >= 0; i--)
 		heapify(array, i, size);
@@ -150,7 +86,6 @@ void heapsort(int *array, int size) {
 	return;
 }
 
-// Sortowanie 2 - Strona 46
 void shell_sort(int *array, int size) {
 	int hn = 1;
 	int h = 1;
@@ -192,23 +127,7 @@ void min_wekt(int *tab, int n, int N, int *i_min, int *min) {
 	return;
 }
 
-int partition_1(int *array, int l, int r) {
-	int i = l - 1;
-	int j;
-	int v = array[r];
-
-	for (j = l; j < r; j++) {
-		if (array[j] <= v) {
-			i++;
-			swap(&array[i], &array[j]);
-		}
-	}
-	swap(&array[i + 1], &array[r]);
-
-	return i + 1;
-}
-
-int partition_2(int *array, int l, int r) {
+int partition(int *array, int l, int r) {
 	int i = l - 1;
 	int j = r;
 	int v = array[r];
