@@ -13,7 +13,7 @@ void generate_dsc_data(int n, FILE *file);
 int main(int argc, char *argv[]) {
 	if (argc != 4) {
 		print_help(argv);
-		return -1;
+		return 0;
 	}
 
 	int count = atoi(argv[1]);
