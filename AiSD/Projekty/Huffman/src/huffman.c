@@ -25,6 +25,30 @@ unsigned char* _str_concat(unsigned char** dest, unsigned char* src);
 
 // ============================================
 
+char* decode(char* input, H_NODE* tree_head, int* out_output_len) {
+	int output_len = 0;
+	char* output = (char*)calloc(1, 1);
+
+	H_NODE* current = tree_head;
+	for (int i = 0; i < strlen(input); ) {
+		if (!current->left && !current->right) {
+			output = (char*)realloc(output,  ++output_len + 1);
+			output[output_len - 1] = current->element;
+			output[output_len] = '\0';
+			current = tree_head;
+		} else {
+			if (input[i] == '1')
+				current = current->right;
+			else 
+				current = current->left;
+			i++;
+		}
+	}
+
+	*out_output_len = output_len;
+	return output;
+}
+
 char* encode(unsigned char* input, size_t input_len, H_NODE* tree_head, size_t *out_len) {
 	int dict_len = 0;
 	H_DICT_ELEM* dict = _get_dict(input, input_len, tree_head, &dict_len);
@@ -97,6 +121,29 @@ H_NODE* build_huffman_tree(unsigned char* input, size_t input_len) {
 	free(nodes);
 
 	return head;
+}
+
+int output_to_file(const char* encoded, FILE* output_file) {
+	size_t enc_len = strlen(encoded);
+
+	size_t num_of_bytes = (enc_len+7)/ 8;
+	unsigned char* buffer = calloc(num_of_bytes, 1);
+
+	for (size_t i = 0; i < enc_len; i++) {
+		if (encoded[i] == '1') {
+			size_t byte = i / 8; // which byte to add this information
+			size_t bit = 7 - (i % 8);
+			buffer[byte] |= (1u << bit);
+		}
+	}
+
+	if (fwrite(buffer, 1, num_of_bytes, output_file) != num_of_bytes) {
+		free(buffer);
+		return -1;
+	}
+
+	free(buffer);
+	return 0;
 }
 
 void _get_two_least_frequent(H_NODE** nodes, int nodes_len, H_NODE** out_first, H_NODE** out_second) {

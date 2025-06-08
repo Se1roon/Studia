@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <string.h>
 
 #include "huffman.h"
 
@@ -28,6 +29,7 @@ int main(int argc, char* argv[]) {
 	
 	size_t bytes_read = fread(input_buffer, sizeof(char), input_file_size, input_file);
 
+	fclose(input_file);
 
 	H_NODE* tree_head = build_huffman_tree(input_buffer, bytes_read);
 
@@ -36,14 +38,20 @@ int main(int argc, char* argv[]) {
 	size_t encoded_len = 0;
 	unsigned char* encoded = encode(input_buffer, bytes_read, tree_head, &encoded_len);
 
+	int decoded_len = 0;
+	char* decoded = decode(encoded, tree_head, &decoded_len);
+	printf("Original: %s\n", decoded);
+	free(decoded);
 
-	printf("Compressed (in binary): %s\n\n", encoded);
+	FILE* output_file = fopen("out_compressed.out", "w+");
+
+	output_to_file(encoded, output_file);
+
+	fclose(output_file);
 
 	printf("Len of the compressed output (bits) = %zu\n", encoded_len);
 
 	free_huffman_tree(tree_head);
-
-	fclose(input_file);
 
 	return 0;
 }

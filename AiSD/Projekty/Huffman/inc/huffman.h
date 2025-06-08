@@ -22,6 +22,9 @@ H_NODE** get_frequencies(unsigned char* input, size_t input_len, int *out_len);
 H_NODE* build_huffman_tree(unsigned char* input, size_t input_len);
 
 char* encode(unsigned char* input, size_t input_len, H_NODE* tree_head, size_t *);
+char* decode(char* input, H_NODE* tree_head, int* out_output_len);
+
+int output_to_file(const char* encoded, FILE* output_file);
 
 void print_huffman_tree(H_NODE* head);
 void free_huffman_tree(H_NODE* head);
