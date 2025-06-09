@@ -23,6 +23,10 @@ void _print_huffman_tree(const H_NODE* node, int indentation);
 
 unsigned char* _str_concat(unsigned char** dest, unsigned char* src);
 
+void _swap(H_NODE** a, H_NODE** b);
+int _partition(H_NODE** array, int low, int high);
+void _quicksort(H_NODE** array, int low, int high);
+
 // ============================================
 
 char* decode(char* input, H_NODE* tree_head, int* out_output_len) {
@@ -83,6 +87,7 @@ H_NODE* build_huffman_tree(unsigned char* input, size_t input_len) {
 	H_NODE** nodes = get_frequencies(input, input_len, &nodes_len);
 
 	while (nodes_len > 1) {
+		_quicksort(nodes, 0, nodes_len - 1);
 		// Least frequent nodes
 		H_NODE* x = NULL;
 		H_NODE* y = NULL;
@@ -332,6 +337,39 @@ unsigned char* _str_concat(unsigned char** dest, unsigned char* src) {
 
 	return *dest;
 
+}
+
+void _quicksort(H_NODE** array, int low, int high) {
+	if (low < high) {
+		int pi = _partition(array, low, high);
+
+		_quicksort(array, low, pi - 1);
+		_quicksort(array, pi + 1, high);
+	}
+}
+
+int _partition(H_NODE** array, int low, int high) {
+	H_NODE* pivot = array[high];
+	int i = low - 1;
+
+	for (int j = low; j < high; ++j) {
+		if (array[j]->freq <= pivot->freq) {
+			++i;
+			_swap(&array[i], &array[j]);
+		}
+	}
+
+	_swap(&array[i + 1], &array[high]);
+
+	return i + 1;
+}
+
+void _swap(H_NODE** a, H_NODE** b) {
+	H_NODE* tmp = *a;
+	*a = *b;
+	*b = tmp;	
+
+	return;
 }
 
 // ============================================

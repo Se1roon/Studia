@@ -9,8 +9,8 @@
 int main(int argc, char* argv[]) {
 	// ./program [input_file] 
 	
-	if (argc != 2) {
-		printf("Usage: %s [input file]\n", argv[0]);
+	if (argc < 2) {
+		printf("Usage: %s [input file] [d]\n", argv[0]);
 		return 0;
 	}
 
@@ -38,10 +38,12 @@ int main(int argc, char* argv[]) {
 	size_t encoded_len = 0;
 	unsigned char* encoded = encode(input_buffer, bytes_read, tree_head, &encoded_len);
 
-	int decoded_len = 0;
-	char* decoded = decode(encoded, tree_head, &decoded_len);
-	printf("Original: %s\n", decoded);
-	free(decoded);
+	if (argc == 3 && strncmp(argv[2], "d", 1) == 0) {
+		int decoded_len = 0;
+		char* decoded = decode(encoded, tree_head, &decoded_len);
+		printf("\nOriginal: %s\n", decoded);
+		free(decoded);
+	}
 
 	FILE* output_file = fopen("out_compressed.out", "w+");
 
@@ -49,7 +51,7 @@ int main(int argc, char* argv[]) {
 
 	fclose(output_file);
 
-	printf("Len of the compressed output (bits) = %zu\n", encoded_len);
+	printf("\nSize of the compressed output (bits) = %zu\n", encoded_len);
 
 	free_huffman_tree(tree_head);
 
